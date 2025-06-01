@@ -1,0 +1,532 @@
+/* Material You Inspired Color Palette (CSS Variables) */
+:root {
+    /* Default Theme (Purple) - Will be overridden by JS */
+    --m3-sys-color-primary-rgb: 103, 80, 164; /* For rgba() */
+    --m3-sys-color-primary: #6750A4;
+    --m3-sys-color-on-primary: #FFFFFF;
+    --m3-sys-color-primary-container: #EADDFF;
+    --m3-sys-color-on-primary-container: #21005D;
+
+    --m3-sys-color-secondary-rgb: 98, 91, 113;
+    --m3-sys-color-secondary: #625B71;
+    --m3-sys-color-on-secondary: #FFFFFF;
+    --m3-sys-color-secondary-container: #E8DEF8;
+    --m3-sys-color-on-secondary-container: #1D192B;
+
+    --m3-sys-color-tertiary-rgb: 125, 82, 96;
+    --m3-sys-color-tertiary: #7D5260;
+    --m3-sys-color-on-tertiary: #FFFFFF;
+    --m3-sys-color-tertiary-container: #FFD8E4;
+    --m3-sys-color-on-tertiary-container: #31111D;
+
+    --m3-sys-color-error: #B3261E;
+    --m3-sys-color-on-error: #FFFFFF;
+    --m3-sys-color-error-container: #F9DEDC;
+    --m3-sys-color-on-error-container: #410E0B;
+    
+    --m3-sys-color-success: #386A20; /* Example success color */
+    --m3-sys-color-on-success: #FFFFFF;
+    --m3-sys-color-success-container: #D9E7CB;
+    --m3-sys-color-on-success-container: #0E1F0A;
+
+    --m3-sys-color-warning: #795500; /* Example warning color */
+    --m3-sys-color-on-warning: #FFFFFF;
+    --m3-sys-color-warning-container: #FFDDB0;
+    --m3-sys-color-on-warning-container: #261800;
+
+    /* Neutral Backgrounds & Surfaces */
+    --m3-sys-color-background: #FFFBFE;
+    --m3-sys-color-on-background: #1C1B1F;
+    --m3-sys-color-surface: #FFFBFE; /* For cards, dialogs, menus */
+    --m3-sys-color-on-surface: #1C1B1F;
+    --m3-sys-color-surface-variant: #E7E0EC; /* Subtle backgrounds, like text fields */
+    --m3-sys-color-on-surface-variant: #49454F; /* Text on surface-variant */
+    --m3-sys-color-outline: #79747E; /* Borders, dividers */
+    --m3-sys-color-shadow: #000000;
+
+    /* Shape & Corner Radius */
+    --m3-shape-corner-none: 0px;
+    --m3-shape-corner-extra-small: 4px;
+    --m3-shape-corner-small: 8px;
+    --m3-shape-corner-medium: 12px;
+    --m3-shape-corner-large: 16px;
+    --m3-shape-corner-extra-large: 28px;
+    --m3-shape-corner-full: 999px; /* For pills, FABs */
+
+    /* Elevation (Shadows) - Simplified */
+    --m3-elevation-1: 0px 1px 3px 1px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.30);
+    --m3-elevation-2: 0px 2px 6px 2px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.30);
+    --m3-elevation-3: 0px 1px 3px 0px rgba(0,0,0,0.30), 0px 4px 8px 3px rgba(0,0,0,0.15);
+    --m3-elevation-4: 0px 2px 3px 0px rgba(0,0,0,0.30), 0px 6px 10px 4px rgba(0,0,0,0.15);
+    --m3-elevation-5: 0px 4px 4px 0px rgba(0,0,0,0.30), 0px 8px 12px 6px rgba(0,0,0,0.15);
+
+    /* Typography (using system fonts for simplicity) */
+    --m3-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/* Dark Theme (Optional - can be toggled with a class on <body> or <html>) */
+/*
+body.dark-theme {
+    --m3-sys-color-primary: #D0BCFF;
+    --m3-sys-color-on-primary: #381E72;
+    --m3-sys-color-primary-container: #4F378B;
+    --m3-sys-color-on-primary-container: #EADDFF;
+    
+    --m3-sys-color-background: #1C1B1F;
+    --m3-sys-color-on-background: #E6E1E5;
+    --m3-sys-color-surface: #1C1B1F;
+    --m3-sys-color-on-surface: #E6E1E5;
+    --m3-sys-color-surface-variant: #49454F;
+    --m3-sys-color-on-surface-variant: #CAC4D0;
+    --m3-sys-color-outline: #938F99;
+}
+*/
+
+body {
+    font-family: var(--m3-font-family);
+    background-color: var(--m3-sys-color-background);
+    color: var(--m3-sys-color-on-background);
+    padding-top: 80px; /* Adjusted for taller navbar */
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--m3-sys-color-surface);
+    box-shadow: var(--m3-elevation-2);
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--m3-sys-color-outline);
+}
+.navbar-brand .fw-bold {
+    color: var(--m3-sys-color-on-surface);
+}
+.navbar-brand .student-info {
+    color: var(--m3-sys-color-on-surface-variant);
+    font-size: 0.8rem;
+}
+.navbar .nav-link {
+    color: var(--m3-sys-color-on-surface-variant);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--m3-shape-corner-full);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.navbar .nav-link:hover, .navbar .nav-link:focus {
+    color: var(--m3-sys-color-on-primary-container);
+    background-color: var(--m3-sys-color-primary-container);
+}
+.navbar .nav-link.active {
+    color: var(--m3-sys-color-on-secondary-container);
+    background-color: var(--m3-sys-color-secondary-container);
+    font-weight: 600;
+}
+.navbar-toggler {
+    border-color: var(--m3-sys-color-outline);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28var(--m3-sys-color-on-surface-rgb),0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+.dropdown-menu {
+    background-color: var(--m3-sys-color-surface);
+    border: 1px solid var(--m3-sys-color-outline);
+    box-shadow: var(--m3-elevation-3);
+    border-radius: var(--m3-shape-corner-medium);
+    padding: var(--m3-shape-corner-extra-small) 0;
+}
+.dropdown-item {
+    color: var(--m3-sys-color-on-surface);
+    padding: 0.5rem 1.25rem;
+}
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: rgba(var(--m3-sys-color-primary-rgb), 0.08);
+    color: var(--m3-sys-color-primary);
+}
+.theme-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 1px solid var(--m3-sys-color-outline);
+}
+
+
+/* Cards */
+.card.surface-card { /* General purpose card */
+    background-color: var(--m3-sys-color-surface);
+    border-radius: var(--m3-shape-corner-large);
+    box-shadow: var(--m3-elevation-1);
+    border: 1px solid var(--m3-sys-color-outline);
+    margin-bottom: 2rem;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    overflow: hidden; /* Important for card-header */
+}
+.card.surface-card:hover {
+    box-shadow: var(--m3-elevation-3);
+    /* transform: translateY(-4px); */ /* Subtle lift */
+}
+.card-header {
+    background-color: transparent; /* Let card background show */
+    color: var(--m3-sys-color-on-surface);
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--m3-sys-color-outline);
+}
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Section Title */
+.section-title {
+    color: var(--m3-sys-color-primary);
+    font-weight: 500;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--m3-sys-color-primary-container);
+    position: relative;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* Align with border-bottom */
+    left: 0;
+    width: 100px;
+    height: 2px;
+    background-color: var(--m3-sys-color-primary);
+}
+
+/* Stats Cards (Overview Section) */
+.stats-card {
+    background-color: var(--m3-sys-color-surface-variant); /* Slightly different from main surface */
+    color: var(--m3-sys-color-on-surface-variant);
+    border-radius: var(--m3-shape-corner-extra-large); /* More rounded */
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    box-shadow: var(--m3-elevation-1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+.stats-card:hover {
+     background-color: var(--m3-sys-color-secondary-container);
+}
+.stats-card .icon-container {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.75rem;
+    background-color: var(--m3-sys-color-primary);
+    color: var(--m3-sys-color-on-primary);
+}
+.stats-card .number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--m3-sys-color-primary);
+    margin: 0.25rem 0;
+    line-height: 1.2;
+}
+.stats-card .label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+.trend-up { color: var(--m3-sys-color-success); font-weight: 500; }
+.trend-down { color: var(--m3-sys-color-error); font-weight: 500; }
+
+/* Buttons - M3 Style */
+.btn {
+    border-radius: var(--m3-shape-corner-full); /* Pill shape */
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.25px;
+    text-transform: none; /* M3 often uses sentence case for buttons */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    border-width: 1px;
+    border-style: solid;
+}
+.btn:focus { box-shadow: none; } /* Remove Bootstrap's default focus */
+
+/* Filled Button (like Bootstrap primary) */
+.btn.btn-filled, .btn.btn-primary-elevated /* Alias for existing */ {
+    background-color: var(--m3-sys-color-primary);
+    color: var(--m3-sys-color-on-primary);
+    border-color: var(--m3-sys-color-primary);
+    box-shadow: var(--m3-elevation-1);
+}
+.btn.btn-filled:hover, .btn.btn-primary-elevated:hover {
+    background-color: color-mix(in srgb, var(--m3-sys-color-primary) 90%, black);
+    box-shadow: var(--m3-elevation-2);
+}
+.btn.btn-filled:active, .btn.btn-primary-elevated:active {
+    box-shadow: none;
+}
+
+/* Outlined Button */
+.btn.btn-outlined, .btn.btn-primary-outlined, .btn.btn-secondary-outlined /* Aliases */ {
+    background-color: transparent;
+    color: var(--m3-sys-color-primary);
+    border-color: var(--m3-sys-color-outline); /* Or primary if preferred */
+}
+.btn.btn-primary-outlined { color: var(--m3-sys-color-primary); border-color: var(--m3-sys-color-primary); }
+.btn.btn-secondary-outlined { color: var(--m3-sys-color-secondary); border-color: var(--m3-sys-color-secondary); }
+
+.btn.btn-outlined:hover, .btn.btn-primary-outlined:hover, .btn.btn-secondary-outlined:hover {
+    background-color: rgba(var(--m3-sys-color-primary-rgb), 0.08); /* Subtle hover state */
+}
+.btn.btn-secondary-outlined:hover {
+     background-color: rgba(var(--m3-sys-color-secondary-rgb), 0.08);
+}
+
+/* Text Button */
+.btn.btn-text {
+    background-color: transparent;
+    color: var(--m3-sys-color-primary);
+    border-color: transparent;
+}
+.btn.btn-text:hover {
+    background-color: rgba(var(--m3-sys-color-primary-rgb), 0.08);
+}
+
+/* Badges inside cards */
+.card-header .badge {
+    font-size: 0.75rem;
+    padding: 0.4em 0.8em;
+    font-weight: 500;
+}
+.bg-secondary-container { background-color: var(--m3-sys-color-secondary-container) !important; }
+.text-on-secondary-container { color: var(--m3-sys-color-on-secondary-container) !important; }
+.bg-tertiary-container { background-color: var(--m3-sys-color-tertiary-container) !important; }
+.text-on-tertiary-container { color: var(--m3-sys-color-on-tertiary-container) !important; }
+
+
+/* Table */
+.exam-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+.exam-table th {
+    background-color: var(--m3-sys-color-surface-variant);
+    color: var(--m3-sys-color-on-surface-variant);
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--m3-sys-color-outline);
+}
+.exam-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--m3-sys-color-outline);
+    color: var(--m3-sys-color-on-surface);
+    vertical-align: middle;
+}
+.exam-table tbody tr:hover {
+    background-color: rgba(var(--m3-sys-color-primary-rgb), 0.04); /* Very subtle hover */
+}
+.exam-table tbody tr.highlight {
+    background-color: rgba(var(--m3-sys-color-primary-rgb), 0.12); /* Highlight state */
+    /* box-shadow: inset 3px 0 0 var(--m3-sys-color-primary); */
+}
+.rank-badge { /* For ranks inside table cells */
+    font-size: 0.75em;
+    padding: .3em .5em;
+    border-radius: var(--m3-shape-corner-small);
+    background-color: var(--m3-sys-color-surface-variant);
+    color: var(--m3-sys-color-on-surface-variant);
+    border: 1px solid var(--m3-sys-color-outline);
+    margin-left: 4px;
+    font-weight: normal;
+}
+/* Rank colors */
+.rank-1-10 { color: #D32F2F; font-weight: 600; } /* Red */
+.rank-11-50 { color: #EF6C00; font-weight: 500; } /* Orange */
+.rank-51-100 { color: #388E3C; font-weight: 500; } /* Green */
+.rank-101-500 { color: #1976D2; } /* Blue */
+.rank-other, .rank-na { color: var(--m3-sys-color-on-surface-variant); }
+
+
+/* Subject Summary Cards (in 科目表现概览) */
+.subject-summary-card {
+    background-color: var(--m3-sys-color-surface);
+    border: 1px solid var(--m3-sys-color-outline);
+    border-radius: var(--m3-shape-corner-medium);
+    padding: 1rem;
+    transition: box-shadow 0.2s ease;
+}
+.subject-summary-card:hover {
+    box-shadow: var(--m3-elevation-2);
+}
+.subject-summary-card .subject-name {
+    font-weight: 500;
+    color: var(--m3-sys-color-on-surface);
+}
+.subject-summary-card .subject-score {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--m3-sys-color-primary);
+}
+.subject-summary-card .progress {
+    background-color: var(--m3-sys-color-surface-variant);
+    border-radius: var(--m3-shape-corner-full);
+}
+
+/* Subject Icon in 优势科目 */
+.subject-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+.science-bg { background-color: var(--m3-sys-color-secondary-container); color: var(--m3-sys-color-on-secondary-container); }
+.arts-bg { background-color: var(--m3-sys-color-tertiary-container); color: var(--m3-sys-color-on-tertiary-container); }
+
+
+/* Chart Containers */
+.chart-container {
+    position: relative;
+    height: 320px; /* Increased height for better visuals */
+    margin-top: 1rem;
+}
+.radar-chart-container {
+    height: 350px; /* Radar might need more space */
+}
+
+/* Footer */
+.footer {
+    background-color: var(--m3-sys-color-surface-variant);
+    color: var(--m3-sys-color-on-surface-variant);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    border-top: 1px solid var(--m3-sys-color-outline);
+}
+.footer h5 { color: var(--m3-sys-color-primary); }
+.footer .opacity-75 { opacity: .85 !important; }
+
+/* Floating Action Button (FAB) */
+.fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--m3-shape-corner-large); /* M3 FABs are slightly less round */
+    background-color: var(--m3-sys-color-primary-container);
+    color: var(--m3-sys-color-on-primary-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: var(--m3-elevation-3);
+    border: none;
+    z-index: 1030; /* Above most elements */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, opacity 0.3s ease;
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+}
+.fab.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+.fab:hover {
+    box-shadow: var(--m3-elevation-4);
+    background-color: color-mix(in srgb, var(--m3-sys-color-primary-container) 92%, black);
+}
+.fab:active {
+    box-shadow: var(--m3-elevation-2);
+}
+
+/* Modal styling */
+.modal-content {
+    background-color: var(--m3-sys-color-surface);
+    border-radius: var(--m3-shape-corner-extra-large);
+    border: 1px solid var(--m3-sys-color-outline);
+    box-shadow: var(--m3-elevation-5);
+}
+.modal-header {
+    border-bottom: 1px solid var(--m3-sys-color-outline);
+    padding: 1.5rem;
+}
+.modal-title {
+    color: var(--m3-sys-color-on-surface);
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.modal-body {
+    padding: 1.5rem;
+    color: var(--m3-sys-color-on-surface-variant);
+}
+.modal-footer {
+    border-top: 1px solid var(--m3-sys-color-outline);
+    padding: 1rem 1.5rem;
+}
+.form-control, .form-select {
+    background-color: var(--m3-sys-color-surface-variant);
+    border: 1px solid var(--m3-sys-color-outline);
+    color: var(--m3-sys-color-on-surface-variant);
+    border-radius: var(--m3-shape-corner-extra-small);
+    padding: 0.6rem 1rem;
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--m3-sys-color-surface-variant);
+    color: var(--m3-sys-color-on-surface-variant);
+    border-color: var(--m3-sys-color-primary);
+    box-shadow: 0 0 0 0.1rem rgba(var(--m3-sys-color-primary-rgb), 0.25);
+}
+.form-label {
+    color: var(--m3-sys-color-on-surface-variant);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+.form-control-color {
+    border-radius: var(--m3-shape-corner-small);
+    height: calc(1.5em + 1.2rem + 2px); /* Match other inputs */
+}
+
+/* Ensure Bootstrap's default theme doesn't interfere too much */
+[data-bs-theme="light"] {
+    --bs-body-color: var(--m3-sys-color-on-background);
+    --bs-body-bg: var(--m3-sys-color-background);
+    --bs-border-color: var(--m3-sys-color-outline);
+}
+
+/* Small screen adjustments */
+@media (max-width: 767.98px) {
+    .content-container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .stats-card {
+        padding: 1.25rem 1rem;
+    }
+    .stats-card .number {
+        font-size: 1.8rem;
+    }
+    .section-title {
+        font-size: 1.5rem;
+    }
+    .fab {
+        bottom: 1rem;
+        right: 1rem;
+    }
+    .card-body, .card-header {
+        padding: 1rem;
+    }
+}

@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生成绩分析系统 - Material You</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body data-bs-theme="light"> <!-- data-bs-theme for bootstrap components if needed -->
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-graduation-cap me-2 fa-lg"></i>
+                <div>
+                    <div class="fw-bold">学生成绩分析系统</div>
+                    <div class="small opacity-75 student-info">高一(2)班 - 卢泽锋</div>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#overview"><i class="fas fa-home me-1"></i> 总览</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#trend"><i class="fas fa-chart-line me-1"></i> 趋势分析</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#subjects"><i class="fas fa-book me-1"></i> 科目详情</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#history"><i class="fas fa-history me-1"></i> 历史记录</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-primary-elevated btn-sm" href="#" id="exportReportBtn"><i class="fas fa-download me-1"></i> 导出报告</a>
+                    </li>
+                    <li class="nav-item dropdown ms-lg-2">
+                        <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-palette me-1"></i> 主题
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+                            <li><a class="dropdown-item" href="#" data-theme="default"><span class="theme-dot" style="background-color: #6750A4;"></span> 默认 (紫)</a></li>
+                            <li><a class="dropdown-item" href="#" data-theme="blue"><span class="theme-dot" style="background-color: #0061A4;"></span> 蓝色</a></li>
+                            <li><a class="dropdown-item" href="#" data-theme="green"><span class="theme-dot" style="background-color: #386A20;"></span> 绿色</a></li>
+                            <li><a class="dropdown-item" href="#" data-theme="teal"><span class="theme-dot" style="background-color: #006A6A;"></span> 青色</a></li>
+                            <li><a class="dropdown-item" href="#" data-theme="orange"><span class="theme-dot" style="background-color: #8C5100;"></span> 橙色</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <div class="px-3 py-1">
+                                    <label for="customColorPicker" class="form-label small mb-1">自定义颜色:</label>
+                                    <input type="color" class="form-control form-control-color" id="customColorPicker" value="#6750A4" title="选择自定义主题色">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container content-container">
+        <!-- 概览卡片 -->
+        <section id="overview">
+            <div class="row mt-4 g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card">
+                        <div class="icon-container">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="number" id="best-rank">43</div>
+                        <div class="label">最佳排名</div>
+                        <div class="trend mt-2">
+                            <span class="trend-up"><i class="fas fa-arrow-up me-1"></i> 提升2名</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card">
+                        <div class="icon-container">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="number" id="highest-score">589</div>
+                        <div class="label">最高总分</div>
+                        <div class="trend mt-2">
+                            <span class="trend-down"><i class="fas fa-arrow-down me-1"></i> 上次 553.5</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card">
+                        <div class="icon-container">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="number" id="best-subject">化学</div>
+                        <div class="label">最佳科目</div>
+                        <div class="mt-2">
+                            <span>排名: <strong class="rank-1-10">6</strong></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="stats-card">
+                        <div class="icon-container">
+                            <i class="fas fa-chart-pie"></i> <!-- Changed icon for visual variety -->
+                        </div>
+                        <div class="number" id="weak-subject">英语</div>
+                        <div class="label">需提升科目</div>
+                        <div class="mt-2">
+                            <span>排名: <strong class="rank-101-500">579</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 成绩趋势图表 -->
+        <section id="trend" class="mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="section-title"><i class="fas fa-chart-line me-2"></i> 成绩趋势分析</h3>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card surface-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar me-2"></i> 全科总分趋势
+                            <span class="badge bg-secondary-container text-on-secondary-container float-end">总分: 9科</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="totalScoreChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card surface-card">
+                        <div class="card-header">
+                             <i class="fas fa-sort-amount-down-alt me-2"></i> 全科排名趋势
+                             <span class="badge bg-secondary-container text-on-secondary-container float-end">总人数: 600人</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="rankChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 各科趋势图表 -->
+        <section id="subject-trends" class="mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="section-title"><i class="fas fa-stream me-2"></i> 各科成绩趋势</h3>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card surface-card">
+                        <div class="card-header">
+                            <i class="fas fa-book me-2"></i> 文科成绩趋势
+                            <span class="badge bg-tertiary-container text-on-tertiary-container float-end">语文/英语/历史/政治/地理</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="artsScoreChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card surface-card">
+                        <div class="card-header">
+                            <i class="fas fa-atom me-2"></i> 理科成绩趋势
+                            <span class="badge bg-tertiary-container text-on-tertiary-container float-end">数学/物理/化学/生物</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="scienceScoreChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 各科成绩表格 -->
+        <section id="history" class="mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="section-title"><i class="fas fa-table me-2"></i> 各次考试成绩详情</h3>
+                    <div class="card surface-card">
+                        <div class="card-header">
+                            <i class="fas fa-file-alt me-2"></i> 成绩详情表
+                            <div class="float-end">
+                                <button class="btn btn-secondary-outlined btn-sm me-2" id="filterBtn"><i class="fas fa-filter me-1"></i> 筛选</button>
+                                <button class="btn btn-primary-outlined btn-sm" id="exportBtn"><i class="fas fa-download me-1"></i> 导出</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover exam-table" id="scoreTable">
+                                    <thead>
+                                        <tr>
+                                            <th>考试名称</th>
+                                            <th>语文</th>
+                                            <th>数学</th>
+                                            <th>英语</th>
+                                            <th>物理</th>
+                                            <th>化学</th>
+                                            <th>生物</th>
+                                            <th>历史</th>
+                                            <th>政治</th>
+                                            <th>地理</th>
+                                            <th>全科总分</th>
+                                            <th>全科排名</th>
+                                            <th>物化生总分</th>
+                                            <th>物化生排名</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="scoreTableBody">
+                                        <!-- 表格内容将通过JavaScript动态生成 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 科目分析 -->
+        <section id="subjects" class="mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="section-title"><i class="fas fa-book-open me-2"></i> 科目表现分析</h3>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card surface-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-pie me-2"></i> 科目成绩分布 (雷达图)
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container radar-chart-container">
+                                <canvas id="subjectRadarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card surface-card">
+                        <div class="card-header">
+                            <i class="fas fa-tasks me-2"></i> 科目表现概览
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="subjectCards">
+                                <!-- 科目卡片将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 优势科目分析 -->
+        <section id="strengths" class="mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="section-title"><i class="fas fa-medal me-2"></i> 优势科目与提升空间</h3>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card surface-card h-100">
+                        <div class="card-header science-bg">
+                            <i class="fas fa-rocket me-2"></i> 理科优势科目
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="subject-icon" style="background-color: var(--m3-sys-color-success-container);">
+                                    <i class="fas fa-flask" style="color: var(--m3-sys-color-on-success-container);"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">化学</h5>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <div class="me-3">
+                                            <span class="badge bg-light-subtle text-dark me-1">最高分: 95.0</span>
+                                            <span class="badge rank-1-10">最佳排名: 6</span>
+                                        </div>
+                                        <div class="trend-up">
+                                            <i class="fas fa-arrow-up me-1"></i> 排名提升191名
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                 <div class="subject-icon" style="background-color: var(--m3-sys-color-primary-container);">
+                                    <i class="fas fa-dna" style="color: var(--m3-sys-color-on-primary-container);"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">生物</h5>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <div class="me-3">
+                                            <span class="badge bg-light-subtle text-dark me-1">最高分: 94.0</span>
+                                            <span class="badge rank-1-10">最佳排名: 18</span>
+                                        </div>
+                                        <div class="trend-up">
+                                            <i class="fas fa-arrow-up me-1"></i> 排名稳定前50
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <h6><i class="fas fa-lightbulb me-2 text-warning"></i> 提升建议</h6>
+                                <p class="mb-0 text-muted">保持化学优势，加强生物实验题训练，争取进入前10名。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card surface-card h-100">
+                        <div class="card-header arts-bg">
+                            <i class="fas fa-edit me-2"></i> 需提升科目
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="subject-icon" style="background-color: var(--m3-sys-color-error-container);">
+                                    <i class="fas fa-language" style="color: var(--m3-sys-color-on-error-container);"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">英语</h5>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <div class="me-3">
+                                            <span class="badge bg-light-subtle text-dark me-1">最高分: 127.0</span>
+                                            <span class="badge rank-101-500">最低排名: 579</span>
+                                        </div>
+                                        <div class="trend-down">
+                                            <i class="fas fa-arrow-down me-1"></i> 波动较大
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                 <div class="subject-icon" style="background-color: var(--m3-sys-color-warning-container);">
+                                    <i class="fas fa-globe-americas" style="color: var(--m3-sys-color-on-warning-container);"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">地理</h5>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <div class="me-3">
+                                            <span class="badge bg-light-subtle text-dark me-1">最高分: 89.0</span>
+                                            <span class="badge rank-101-500">最低排名: 490</span>
+                                        </div>
+                                        <div class="trend-up">
+                                            <i class="fas fa-arrow-up me-1"></i> 最近提升明显
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <h6><i class="fas fa-lightbulb me-2 text-warning"></i> 提升建议</h6>
+                                <p class="mb-0 text-muted">加强英语词汇积累和阅读理解训练，地理需要强化地图识别和区域分析能力。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="d-flex align-items-center mb-3">
+                        <i class="fas fa-graduation-cap me-2 fa-lg"></i>
+                        学生成绩分析系统
+                    </h5>
+                    <p class="mb-0 opacity-75">全面分析学生成绩数据，帮助识别优势科目和提升空间，优化学习策略。</p>
+                </div>
+                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                    <p class="mb-1 small opacity-75">数据最后更新: 2023年10月15日</p>
+                    <p class="mb-0 small opacity-75">© 2023 教育数据分析平台 | 版本 1.3.0 M3</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 悬浮按钮 (FAB - Floating Action Button) -->
+    <button class="fab" id="scrollTopBtn" title="回到顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 引入成绩数据 -->
+    <script src="data.js"></script>
+    
+    <!-- 主应用脚本 -->
+    <script>
+        // 全局图表实例存储，方便更新
+        const chartInstances = {};
+
+        // 预定义主题色
+        const themes = {
+            default: { primary: '#6750A4', secondary: '#625B71', tertiary: '#7D5260', surface: '#FFFBFE', neutral: '#938F99' },
+            blue:    { primary: '#0B61A4', secondary: '#535F70', tertiary: '#6B5778', surface: '#FDFBFF', neutral: '#8E9099' },
+            green:   { primary: '#386A20', secondary: '#55624C', tertiary: '#3F665C', surface: '#F8FAF0', neutral: '#909288' },
+            teal:    { primary: '#006A6A', secondary: '#4A6363', tertiary: '#4A6275', surface: '#F4FAFA', neutral: '#899393' },
+            orange:  { primary: '#8C5100', secondary: '#715B41', tertiary: '#60603F', surface: '#FFF8F3', neutral: '#9B8F81' }
+        };
+        
+        function applyTheme(themeColors) {
+            const root = document.documentElement;
+            root.style.setProperty('--m3-sys-color-primary-rgb', hexToRgb(themeColors.primary).join(', '));
+            root.style.setProperty('--m3-sys-color-primary', themeColors.primary);
+            root.style.setProperty('--m3-sys-color-on-primary',最佳对比色(themeColors.primary));
+            root.style.setProperty('--m3-sys-color-primary-container', 轻量化颜色(themeColors.primary, 0.8)); // 模拟浅色容器
+            root.style.setProperty('--m3-sys-color-on-primary-container', 最佳对比色(轻量化颜色(themeColors.primary, 0.8)));
+
+            root.style.setProperty('--m3-sys-color-secondary-rgb', hexToRgb(themeColors.secondary).join(', '));
+            root.style.setProperty('--m3-sys-color-secondary', themeColors.secondary);
+            root.style.setProperty('--m3-sys-color-on-secondary', 最佳对比色(themeColors.secondary));
+            root.style.setProperty('--m3-sys-color-secondary-container', 轻量化颜色(themeColors.secondary, 0.8));
+            root.style.setProperty('--m3-sys-color-on-secondary-container', 最佳对比色(轻量化颜色(themeColors.secondary, 0.8)));
+
+            root.style.setProperty('--m3-sys-color-tertiary-rgb', hexToRgb(themeColors.tertiary).join(', '));
+            root.style.setProperty('--m3-sys-color-tertiary', themeColors.tertiary);
+            root.style.setProperty('--m3-sys-color-on-tertiary', 最佳对比色(themeColors.tertiary));
+            root.style.setProperty('--m3-sys-color-tertiary-container', 轻量化颜色(themeColors.tertiary, 0.8));
+            root.style.setProperty('--m3-sys-color-on-tertiary-container', 最佳对比色(轻量化颜色(themeColors.tertiary, 0.8)));
+            
+            root.style.setProperty('--m3-sys-color-surface', themeColors.surface); // 通常是白色或非常浅的灰色
+            root.style.setProperty('--m3-sys-color-on-surface', 最佳对比色(themeColors.surface));
+            root.style.setProperty('--m3-sys-color-surface-variant', 轻量化颜色(themeColors.neutral, 0.8)); // 模拟 surface variant
+            root.style.setProperty('--m3-sys-color-on-surface-variant', 最佳对比色(轻量化颜色(themeColors.neutral, 0.8)));
+            root.style.setProperty('--m3-sys-color-outline', 轻量化颜色(themeColors.neutral, 0.5)); // 模拟 outline
+
+            // 更新图表颜色
+            if (window.examData) {
+                renderCharts(window.examData, true); // forceUpdate = true
+            }
+        }
+
+        function hexToRgb(hex) {
+            let r = 0, g = 0, b = 0;
+            if (hex.length == 4) {
+                r = parseInt(hex[1] + hex[1], 16);
+                g = parseInt(hex[2] + hex[2], 16);
+                b = parseInt(hex[3] + hex[3], 16);
+            } else if (hex.length == 7) {
+                r = parseInt(hex[1] + hex[2], 16);
+                g = parseInt(hex[3] + hex[4], 16);
+                b = parseInt(hex[5] + hex[6], 16);
+            }
+            return [r, g, b];
+        }
+
+        function 最佳对比色(bgColorHex) {
+            const rgb = hexToRgb(bgColorHex);
+            const luminance = 0.2126 * rgb[0] / 255 + 0.7152 * rgb[1] / 255 + 0.0722 * rgb[2] / 255;
+            return luminance > 0.5 ? '#000000' : '#FFFFFF';
+        }
+        
+        function 轻量化颜色(hex, lightnessFactor = 0.9) { // 0.8 for lighter, 1.2 for darker
+            let [r, g, b] = hexToRgb(hex);
+            const toWhite = lightnessFactor < 1; // true if making lighter
+            const factor = toWhite ? 1 - lightnessFactor : lightnessFactor - 1;
+
+            r = Math.round(toWhite ? r + (255 - r) * factor : r * (1-factor));
+            g = Math.round(toWhite ? g + (255 - g) * factor : g * (1-factor));
+            b = Math.round(toWhite ? b + (255 - b) * factor : b * (1-factor));
+
+            r = Math.min(255, Math.max(0, r));
+            g = Math.min(255, Math.max(0, g));
+            b = Math.min(255, Math.max(0, b));
+
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+        
+        function generateRelatedColors(baseHex) {
+            // 这是一个简化的调色板生成逻辑，实际 Material You 更复杂
+            const primary = baseHex;
+            // 尝试生成近似的 secondary 和 tertiary
+            // 这里的逻辑可以根据需要变得更复杂，例如通过 HSL 调整色相和饱和度
+            const secondary = 轻量化颜色(primary, 1.05); // 稍微暗一点或色相偏移
+            const tertiary = 轻量化颜色(primary, 0.95);  // 稍微亮一点或色相偏移
+            const neutral = '#808080'; // 固定一个中性色，或者从 primary 推导
+            return { primary, secondary, tertiary, surface: '#FFFBFE', neutral };
+        }
+
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            const examData = window.examData;
+            
+            // 初始化主题
+            const savedThemeName = localStorage.getItem('selectedThemeName') || 'default';
+            const savedCustomColor = localStorage.getItem('customThemeColor');
+
+            if (savedThemeName === 'custom' && savedCustomColor) {
+                applyTheme(generateRelatedColors(savedCustomColor));
+                document.getElementById('customColorPicker').value = savedCustomColor;
+            } else if (themes[savedThemeName]) {
+                applyTheme(themes[savedThemeName]);
+            } else {
+                applyTheme(themes.default); // Fallback
+            }
+
+
+            // 主题切换事件
+            document.querySelectorAll('#themeDropdown .dropdown-item[data-theme]').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const themeName = this.dataset.theme;
+                    if (themes[themeName]) {
+                        applyTheme(themes[themeName]);
+                        localStorage.setItem('selectedThemeName', themeName);
+                        localStorage.removeItem('customThemeColor'); // 清除自定义颜色
+                    }
+                });
+            });
+
+            const customColorPicker = document.getElementById('customColorPicker');
+            customColorPicker.addEventListener('input', function() {
+                const customColor = this.value;
+                applyTheme(generateRelatedColors(customColor));
+                localStorage.setItem('selectedThemeName', 'custom');
+                localStorage.setItem('customThemeColor', customColor);
+            });
+            
+            // 填充概览卡片
+            document.getElementById('best-rank').textContent = findBestRank(examData);
+            document.getElementById('highest-score').textContent = findHighestScore(examData);
+            
+            // 填充表格
+            renderScoreTable(examData);
+            
+            // 填充科目卡片
+            renderSubjectCards(examData);
+            
+            // 渲染图表
+            renderCharts(examData, false); // Initial render
+            
+            // 添加表格行点击效果
+            document.getElementById('scoreTableBody').addEventListener('click', function(event) {
+                const row = event.target.closest('tr');
+                if (row) {
+                    document.querySelectorAll('#scoreTableBody tr.highlight').forEach(r => r.classList.remove('highlight'));
+                    row.classList.add('highlight');
+                    // setTimeout(() => row.classList.remove('highlight'), 2000); // 可选：自动移除高亮
+                }
+            });
+            
+            // 添加筛选功能
+            document.getElementById('filterBtn').addEventListener('click', function() {
+                let filterModal = document.getElementById('filterModal');
+                if (!filterModal) {
+                    const filterDialog = `
+                        <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><i class="fas fa-filter me-2"></i>筛选条件</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">考试名称包含</label>
+                                            <input type="text" class="form-control" id="examNameFilter">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">总分范围</label>
+                                            <div class="row g-2">
+                                                <div class="col">
+                                                    <input type="number" class="form-control" placeholder="最小值" id="minTotalScore">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="number" class="form-control" placeholder="最大值" id="maxTotalScore">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">排名范围</label>
+                                            <div class="row g-2">
+                                                <div class="col">
+                                                    <input type="number" class="form-control" placeholder="最小值" id="minRank">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="number" class="form-control" placeholder="最大值" id="maxRank">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-text" data-bs-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-filled" id="applyFilter">应用筛选</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    document.body.insertAdjacentHTML('beforeend', filterDialog);
+                    filterModal = document.getElementById('filterModal');
+                     filterModal.addEventListener('hidden.bs.modal', function() {
+                        this.remove(); // 确保关闭时移除DOM
+                    });
+                }
+                
+                const modal = new bootstrap.Modal(filterModal);
+                modal.show();
+                
+                document.getElementById('applyFilter').addEventListener('click', function() {
+                    const examNameFilter = document.getElementById('examNameFilter').value.toLowerCase();
+                    const minTotalScore = parseFloat(document.getElementById('minTotalScore').value) || 0;
+                    const maxTotalScore = parseFloat(document.getElementById('maxTotalScore').value) || Infinity;
+                    const minRank = parseInt(document.getElementById('minRank').value) || 0;
+                    const maxRank = parseInt(document.getElementById('maxRank').value) || Infinity;
+                    
+                    const filteredData = window.examData.filter(exam => {
+                        return exam.examName.toLowerCase().includes(examNameFilter) &&
+                               exam.totalScore >= minTotalScore &&
+                               exam.totalScore <= maxTotalScore &&
+                               exam.totalRank >= minRank &&
+                               exam.totalRank <= maxRank;
+                    });
+                    
+                    renderScoreTable(filteredData);
+                    modal.hide();
+                });
+            });
+            
+            // 添加导出Excel功能
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                const wb = XLSX.utils.book_new();
+                const exams = window.examData; // 或者使用当前表格筛选后的数据
+                const data = [
+                    ["考试名称", "语文", "数学", "英语", "物理", "化学", "生物", "历史", "政治", "地理", "全科总分", "全科排名", "物化生总分", "物化生排名"]
+                ];
+                
+                exams.forEach(exam => {
+                    data.push([
+                        exam.examName,
+                        exam.subjects.语文?.score || '-', exam.subjects.数学?.score || '-',
+                        exam.subjects.英语?.score || '-', exam.subjects.物理?.score || '-',
+                        exam.subjects.化学?.score || '-', exam.subjects.生物?.score || '-',
+                        exam.subjects.历史?.score || '-', exam.subjects.政治?.score || '-',
+                        exam.subjects.地理?.score || '-',
+                        exam.totalScore, exam.totalRank,
+                        exam.scienceScore || '-', exam.scienceRank || '-'
+                    ]);
+                });
+                
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                XLSX.utils.book_append_sheet(wb, ws, "成绩数据");
+                XLSX.writeFile(wb, "学生成绩数据.xlsx");
+            });
+
+            // 导航栏高亮当前部分
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link:not(.dropdown-toggle)');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= (sectionTop - 100)) { // 100 is an offset
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+
+                // FAB 显示/隐藏
+                const scrollTopBtn = document.getElementById('scrollTopBtn');
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+
+            // FAB 点击事件
+            document.getElementById('scrollTopBtn').addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // 查找最佳排名
+        function findBestRank(exams) {
+            return exams.reduce((min, exam) => {
+                return Math.min(min, exam.totalRank, exam.scienceRank || min);
+            }, Infinity);
+        }
+
+        // 查找最高总分
+        function findHighestScore(exams) {
+            return exams.reduce((max, exam) => {
+                return Math.max(max, exam.totalScore, exam.scienceScore || max);
+            }, 0);
+        }
+
+        // 渲染成绩表格
+        function renderScoreTable(exams) {
+            const tableBody = document.getElementById('scoreTableBody');
+            tableBody.innerHTML = '';
+            
+            exams.forEach(exam => {
+                const row = document.createElement('tr');
+                row.classList.add('exam-row');
+                
+                row.innerHTML = `
+                    <td><strong>${exam.examName}</strong></td>
+                    <td>${formatScore(exam.subjects.语文?.score)} <span class="badge rank-badge ${getRankClass(exam.subjects.语文?.rank)}">${exam.subjects.语文?.rank || '-'}</span></td>
+                    <td>${formatScore(exam.subjects.数学?.score)} <span class="badge rank-badge ${getRankClass(exam.subjects.数学?.rank)}">${exam.subjects.数学?.rank || '-'}</span></td>
+                    <td>${formatScore(exam.subjects.英语?.score)} <span class="badge rank-badge ${getRankClass(exam.subjects.英语?.rank)}">${exam.subjects.英语?.rank || '-'}</span></td>
+                    <td>${formatScore(exam.subjects.物理?.score)} <span class="badge rank-badge ${getRankClass(exam.subjects.物理?.rank)}">${exam.subjects.物理?.rank || '-'}</span></td>
+                    <td>${formatScore(exam.subjects.化学?.score)} <span class="badge rank-badge ${getRankClass(exam.subjects.化学?.rank)}">${exam.subjects.化学?.rank || '-'}</span></td>
+                    <td>${formatScore(exam.subjects.生物?.score)} <span class="badge rank-badge ${getRankClass(exam.subjects.生物?.rank)}">${exam.subjects.生物?.rank || '-'}</span></td>
+                    <td>${exam.subjects.历史 ? formatScore(exam.subjects.历史.score) + ' <span class="badge rank-badge ' + getRankClass(exam.subjects.历史.rank) + '">' + (exam.subjects.历史.rank || '-') + '</span>' : '-'}</td>
+                    <td>${exam.subjects.政治 ? formatScore(exam.subjects.政治.score) + ' <span class="badge rank-badge ' + getRankClass(exam.subjects.政治.rank) + '">' + (exam.subjects.政治.rank || '-') + '</span>' : '-'}</td>
+                    <td>${exam.subjects.地理 ? formatScore(exam.subjects.地理.score) + ' <span class="badge rank-badge ' + getRankClass(exam.subjects.地理.rank) + '">' + (exam.subjects.地理.rank || '-') + '</span>' : '-'}</td>
+                    <td><strong>${formatScore(exam.totalScore)}</strong></td>
+                    <td><span class="rank-cell ${getRankClass(exam.totalRank)}">${exam.totalRank}</span></td>
+                    <td><strong>${formatScore(exam.scienceScore)}</strong></td>
+                    <td>${exam.scienceRank ? '<span class="rank-cell ' + getRankClass(exam.scienceRank) + '">' + exam.scienceRank + '</span>' : '-'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 渲染科目卡片
+        function renderSubjectCards(exams) {
+            const container = document.getElementById('subjectCards');
+            container.innerHTML = '';
+            const subjects = ['语文', '数学', '英语', '物理', '化学', '生物', '历史', '政治', '地理']; // 固定顺序
+            
+            subjects.forEach(subject => {
+                const scores = exams.map(exam => exam.subjects[subject]?.score).filter(score => score !== undefined);
+                const ranks = exams.map(exam => exam.subjects[subject]?.rank).filter(rank => rank !== undefined);
+                
+                if (scores.length === 0) return;
+                
+                const avgScore = (scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(1);
+                const bestScore = Math.max(...scores);
+                const bestRank = Math.min(...ranks);
+                
+                const card = document.createElement('div');
+                card.className = 'col-md-6 mb-3'; // Adjusted for 2 columns
+                card.innerHTML = `
+                    <div class="subject-summary-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="subject-name">${subject}</div>
+                            <div class="subject-score">${avgScore}</div>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted small mb-2">
+                            <span>最佳排名: <span class="${getRankClass(bestRank)} fw-bold">${bestRank}</span></span>
+                            <span>最高分: <strong class="text-dark">${bestScore.toFixed(1)}</strong></span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar" role="progressbar" style="width: ${(avgScore / (subject ==='英语' || subject === '语文' || subject === '数学' ? 150 : 100) * 100)}%; background-color: ${getSubjectColorForChart(subject, 0.7)};" aria-valuenow="${avgScore}" aria-valuemin="0" aria-valuemax="150"></div>
+                        </div>
+                         <div class="subject-progress small mt-1 ${scores.length > 1 && scores[scores.length-1] !== scores[0] ? (scores[scores.length-1] > scores[0] ? 'text-success' : 'text-danger') : 'text-muted'}">
+                            <i class="fas ${scores.length > 1 && scores[scores.length-1] !== scores[0] ? (scores[scores.length-1] > scores[0] ? 'fa-arrow-up' : 'fa-arrow-down') : 'fa-minus'} me-1"></i>
+                            ${scores.length > 1 && scores[scores.length-1] !== scores[0] ? `相比首次: ${scores[scores.length-1] > scores[0] ? '+' : ''}${(scores[scores.length-1] - scores[0]).toFixed(1)}` : '表现平稳'}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 渲染图表
+        function renderCharts(exams, forceUpdate = false) {
+            const labels = exams.map(exam => exam.examName);
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--m3-sys-color-primary').trim();
+            const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--m3-sys-color-secondary').trim();
+            const tertiaryColor = getComputedStyle(document.documentElement).getPropertyValue('--m3-sys-color-tertiary').trim();
+            const surfaceVariantColor = getComputedStyle(document.documentElement).getPropertyValue('--m3-sys-color-surface-variant').trim();
+            const onSurfaceColor = getComputedStyle(document.documentElement).getPropertyValue('--m3-sys-color-on-surface').trim();
+
+            const chartConfigs = [
+                {
+                    id: 'totalScoreChart',
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '全科总分', data: exams.map(exam => exam.totalScore),
+                            borderColor: primaryColor, backgroundColor: hexToRgbaWithVar('--m3-sys-color-primary-rgb', 0.1),
+                            tension: 0.4, fill: true, pointBackgroundColor: primaryColor
+                        }, {
+                            label: '物化生总分', data: exams.map(exam => exam.scienceScore),
+                            borderColor: secondaryColor, backgroundColor: hexToRgbaWithVar('--m3-sys-color-secondary-rgb', 0.1),
+                            tension: 0.4, fill: true, pointBackgroundColor: secondaryColor
+                        }]
+                    },
+                    options: getChartOptions('分数趋势', onSurfaceColor, surfaceVariantColor)
+                },
+                {
+                    id: 'rankChart',
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '全科排名', data: exams.map(exam => exam.totalRank),
+                            borderColor: primaryColor, backgroundColor: hexToRgbaWithVar('--m3-sys-color-primary-rgb', 0.1),
+                            tension: 0.4, fill: true, pointBackgroundColor: primaryColor
+                        }, {
+                            label: '物化生排名', data: exams.map(exam => exam.scienceRank),
+                            borderColor: secondaryColor, backgroundColor: hexToRgbaWithVar('--m3-sys-color-secondary-rgb', 0.1),
+                            tension: 0.4, fill: true, pointBackgroundColor: secondaryColor
+                        }]
+                    },
+                    options: { ...getChartOptions('排名趋势', onSurfaceColor, surfaceVariantColor), scales: { ...getChartOptions().scales, y: { ...getChartOptions().scales.y, reverse: true, min: 0, max: 600 } } }
+                },
+                {
+                    id: 'artsScoreChart',
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            createSubjectDataset(exams, '语文', getSubjectColorForChart('语文', 1), getSubjectColorForChart('语文', 0.1)),
+                            createSubjectDataset(exams, '英语', getSubjectColorForChart('英语', 1), getSubjectColorForChart('英语', 0.1)),
+                            createSubjectDataset(exams, '历史', getSubjectColorForChart('历史', 1), getSubjectColorForChart('历史', 0.1)),
+                            createSubjectDataset(exams, '政治', getSubjectColorForChart('政治', 1), getSubjectColorForChart('政治', 0.1)),
+                            createSubjectDataset(exams, '地理', getSubjectColorForChart('地理', 1), getSubjectColorForChart('地理', 0.1))
+                        ]
+                    },
+                    options: getChartOptions('文科成绩趋势', onSurfaceColor, surfaceVariantColor)
+                },
+                 {
+                    id: 'scienceScoreChart',
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            createSubjectDataset(exams, '数学', getSubjectColorForChart('数学', 1), getSubjectColorForChart('数学', 0.1)),
+                            createSubjectDataset(exams, '物理', getSubjectColorForChart('物理', 1), getSubjectColorForChart('物理', 0.1)),
+                            createSubjectDataset(exams, '化学', getSubjectColorForChart('化学', 1), getSubjectColorForChart('化学', 0.1)),
+                            createSubjectDataset(exams, '生物', getSubjectColorForChart('生物', 1), getSubjectColorForChart('生物', 0.1))
+                        ]
+                    },
+                    options: getChartOptions('理科成绩趋势', onSurfaceColor, surfaceVariantColor)
+                },
+                {
+                    id: 'subjectRadarChart',
+                    type: 'radar',
+                    data: {
+                        labels: ['语文', '数学', '英语', '物理', '化学', '生物', '历史', '政治', '地理'],
+                        datasets: [{
+                            label: '最近一次考试',
+                            data: ['语文', '数学', '英语', '物理', '化学', '生物', '历史', '政治', '地理'].map(subject => exams[exams.length - 1].subjects[subject]?.score || 0),
+                            borderColor: primaryColor, backgroundColor: hexToRgbaWithVar('--m3-sys-color-primary-rgb', 0.2),
+                            pointBackgroundColor: primaryColor, pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: primaryColor
+                        }, {
+                            label: '科目平均分',
+                            data: ['语文', '数学', '英语', '物理', '化学', '生物', '历史', '政治', '地理'].map(subject => {
+                                const scores = exams.map(exam => exam.subjects[subject]?.score).filter(s => s !== undefined);
+                                return scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+                            }),
+                            borderColor: secondaryColor, backgroundColor: hexToRgbaWithVar('--m3-sys-color-secondary-rgb', 0.2),
+                            pointBackgroundColor: secondaryColor, pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: secondaryColor
+                        }]
+                    },
+                    options: getRadarChartOptions(onSurfaceColor, surfaceVariantColor)
+                }
+            ];
+
+            chartConfigs.forEach(config => {
+                const ctx = document.getElementById(config.id)?.getContext('2d');
+                if (!ctx) return;
+
+                if (chartInstances[config.id] && forceUpdate) {
+                    chartInstances[config.id].destroy(); // 销毁旧实例
+                }
+                if (!chartInstances[config.id] || forceUpdate) {
+                     chartInstances[config.id] = new Chart(ctx, {
+                        type: config.type,
+                        data: config.data,
+                        options: config.options
+                    });
+                } else { // Only update data and relevant options if not forcing full re-render
+                    chartInstances[config.id].data = config.data;
+                    // Potentially update some options like colors if they changed
+                    chartInstances[config.id].options.plugins.title.color = onSurfaceColor;
+                    chartInstances[config.id].options.plugins.legend.labels.color = onSurfaceColor;
+                    chartInstances[config.id].options.scales.x.ticks.color = onSurfaceColor;
+                    chartInstances[config.id].options.scales.y.ticks.color = onSurfaceColor;
+                    chartInstances[config.id].options.scales.y.grid.color = surfaceVariantColor;
+                    if (config.id === 'subjectRadarChart') {
+                         chartInstances[config.id].options.scales.r.pointLabels.color = onSurfaceColor;
+                         chartInstances[config.id].options.scales.r.grid.color = surfaceVariantColor;
+                         chartInstances[config.id].options.scales.r.angleLines.color = surfaceVariantColor;
+                    }
+                    chartInstances[config.id].update();
+                }
+            });
+        }
+        
+        function hexToRgbaWithVar(rgbVarName, alpha) {
+            const rgbString = getComputedStyle(document.documentElement).getPropertyValue(rgbVarName).trim();
+            return `rgba(${rgbString}, ${alpha})`;
+        }
+
+
+        // 创建科目数据集
+        function createSubjectDataset(exams, subjectName, color, bgColor) {
+            return {
+                label: subjectName,
+                data: exams.map(exam => exam.subjects[subjectName]?.score || null),
+                borderColor: color,
+                backgroundColor: bgColor,
+                borderWidth: 2.5,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: color,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            };
+        }
+
+        // 辅助函数
+        function formatScore(score) {
+            return typeof score === 'number' ? score.toFixed(1) : '-';
+        }
+
+        function getRankClass(rank) {
+            if (rank === undefined || rank === null || rank === '-') return 'rank-na';
+            if (rank <= 10) return 'rank-1-10';
+            if (rank <= 50) return 'rank-11-50';
+            if (rank <= 100) return 'rank-51-100';
+            if (rank <= 500) return 'rank-101-500'; // Default for higher ranks
+            return 'rank-other';
+        }
+        
+        // 用于图表和进度条的科目颜色，确保与主题有一定协调性
+        // alpha: 0-1
+        function getSubjectColorForChart(subject, alpha = 1) {
+            const baseColors = { // Using more distinct base colors
+                '语文': '#4285F4', // Google Blue
+                '数学': '#DB4437', // Google Red
+                '英语': '#F4B400', // Google Yellow
+                '物理': '#0F9D58', // Google Green
+                '化学': '#9C27B0', // Purple
+                '生物': '#00BCD4', // Cyan
+                '历史': '#FF9800', // Orange
+                '政治': '#E91E63', // Pink
+                '地理': '#795548'  // Brown
+            };
+            let hexColor = baseColors[subject] || '#9E9E9E'; // Default to Grey
+
+            // Make color lighter or darker based on current theme's primary luminance
+            const primaryRgbVar = getComputedStyle(document.documentElement).getPropertyValue('--m3-sys-color-primary-rgb').trim();
+            const [pr, pg, pb] = primaryRgbVar.split(',').map(Number);
+            const primaryLuminance = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
+            
+            // If primary theme is dark, make subject colors slightly lighter, and vice versa
+            // This is a very simplified tint/shade
+            let [r, g, b] = hexToRgb(hexColor);
+            if (primaryLuminance < 0.5) { // Dark theme implies lighter subject colors
+                r = Math.min(255, r + 30);
+                g = Math.min(255, g + 30);
+                b = Math.min(255, b + 30);
+            } else { // Light theme implies slightly darker/more saturated subject colors
+                r = Math.max(0, r - 10);
+                g = Math.max(0, g - 10);
+                b = Math.max(0, b - 10);
+            }
+            hexColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+            
+            const [finalR, finalG, finalB] = hexToRgb(hexColor);
+            return `rgba(${finalR}, ${finalG}, ${finalB}, ${alpha})`;
+        }
+
+
+        function getChartOptions(title, textColor, gridColor) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { // M3 style interactions
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: textColor, usePointStyle: true, boxWidth: 8, padding: 20, font: {size: 12} }
+                    },
+                    title: { display: !!title, text: title, color: textColor, font: {size: 16, weight: '500'}, padding: { top: 10, bottom: 20 } },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.75)', // Darker tooltip
+                        titleFont: { size: 14, weight: 'bold'},
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        boxPadding: 4
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: gridColor, drawBorder: false },
+                        ticks: { color: textColor, font: {size: 11} }
+                    },
+                    x: {
+                        grid: { display: false }, // Cleaner X-axis
+                        ticks: { color: textColor, font: {size: 11} }
+                    }
+                },
+                elements: {
+                    line: { borderWidth: 2.5, tension: 0.4 },
+                    point: { radius: 0, hoverRadius: 5, hitRadius: 10 } // Hide points by default, show on hover
+                }
+            };
+        }
+        
+        function getRadarChartOptions(textColor, gridColor) {
+             return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: textColor, usePointStyle: true, boxWidth: 8, padding: 15, font: {size: 12} } },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.75)',
+                        titleFont: { size: 14, weight: 'bold'},
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        boxPadding: 4
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: gridColor },
+                        grid: { color: gridColor },
+                        pointLabels: { font: { size: 12 }, color: textColor },
+                        ticks: {
+                            display: false, // Hide radial ticks for cleaner look
+                            // backdropColor: 'rgba(0,0,0,0.03)', // M3 subtle tick background
+                            // color: textColor
+                        },
+                        min: 0,
+                        max: 150 // Or dynamically set based on data
+                    }
+                },
+                elements: {
+                    line: { borderWidth: 2.5 },
+                    point: { radius: 3, hoverRadius: 5 }
+                }
+            };
+        }
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
